@@ -14,10 +14,11 @@ set(SOURCES
     resources.qrc
     
     src/main.cpp
+    src/Canvas/CanvasManager/CanvasManager.cpp
 )
 
 set(HEADERS
-
+    src/Canvas/CanvasManager/CanvasManager.h
 )
 
 add_executable(Simple-Drawing ${SOURCES} ${HEADERS})

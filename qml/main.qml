@@ -73,6 +73,20 @@ ApplicationWindow {
                 implicitWidth: 1400
                 color: "transparent"
                 clip: true
+
+                Item {
+                    Rectangle {
+                        id: canvas
+                        x: (workspace.width  - width*scale)  / 2
+                        y: (workspace.height - height*scale) / 2
+                        width: canvasManager.width
+                        height: canvasManager.height
+                        color: "white"
+                        border.color: "black"
+                        anchors.centerIn: parent
+                        visible: canvasManager.width > 0
+                    }
+                }
             }
 
             Rectangle {

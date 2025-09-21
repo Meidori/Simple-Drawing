@@ -1,19 +1,21 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QQmlContext>
+#include "./Canvas/CanvasManager/CanvasManager.h"
 
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
-
+    
+    CanvasManager manager;
+    
+    qmlRegisterType<CanvasManager>("CanvasUtils", 1, 0, "CanvasManager");
+    
     QQmlApplicationEngine engine;
-    const QUrl url(u"qrc:/qml/main.qml"_qs);
     
-    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
-                     &app, [url](QObject *obj, const QUrl &objUrl) {
-        if (!obj && url == objUrl)
-            QCoreApplication::exit(-1);
-    }, Qt::QueuedConnection);
+    engine.rootContext()->setContextProperty("canvasManager", &manager);
     
+    const QUrl url(u"qml/main.qml"_qs);
     engine.load(url);
     
     return app.exec();

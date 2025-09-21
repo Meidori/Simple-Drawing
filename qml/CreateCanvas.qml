@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Material
 import QtQuick.Layouts
+import CanvasUtils
 
 Dialog {
     id: createCanvasDialog
@@ -84,7 +85,8 @@ Dialog {
                 createCanvasDialog.canvasWidthValue = parseInt(canvasWidth.text);
                 createCanvasDialog.canvasHeightValue = parseInt(canvasHeight.text);
 
-                console.log("New canvas w/h value", "width =", createCanvasDialog.canvasWidthValue, "height =", createCanvasDialog.canvasHeightValue);
+                canvasManager.createCanvas(createCanvasDialog.canvasWidthValue, createCanvasDialog.canvasHeightValue)
+
 
                 createCanvasDialog.close();
             }
