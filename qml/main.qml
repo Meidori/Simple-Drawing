@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Material
 import QtQuick.Layouts
+import CanvasUtils
 
 ApplicationWindow {
     visible: true
@@ -11,6 +12,10 @@ ApplicationWindow {
     Material.primary: Material.Purple
     Material.accent: Material.Pink
 
+    CreateCanvas {
+        id: createCanvasDialog
+    }
+
     menuBar: MenuBar {
         Menu {
             title: "File"
@@ -18,7 +23,7 @@ ApplicationWindow {
             Action {
                 text: "New"
                 onTriggered: {
-                    console.log("New file action triggered");
+                    createCanvasDialog.open()
                 }
             }
             Action {
@@ -69,6 +74,19 @@ ApplicationWindow {
                 implicitWidth: 1400
                 color: "transparent"
                 clip: true
+
+                Item {
+                    width: canvas.width
+                    height: canvas.height
+                    x: (workspace.width  - width*scale)  / 2
+                    y: (workspace.height - height*scale) / 2
+                    CanvasItem {
+                        id: canvas
+                        width: canvasManager.width
+                        height: canvasManager.height
+                        image: canvasManager.currentImage
+                    }
+                }
             }
 
             Rectangle {
