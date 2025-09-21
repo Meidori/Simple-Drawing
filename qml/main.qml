@@ -48,4 +48,40 @@ ApplicationWindow {
             }
         }
     }
+
+    SplitView {
+        id: allWorkspaces
+        anchors.fill: parent
+        orientation: Qt.Vertical
+
+        SplitView {
+            orientation: Qt.Horizontal
+            implicitHeight: 800
+
+            Rectangle {
+                id: toolBar
+                implicitWidth: 50
+                color: "transparent"
+            }
+
+            Rectangle {
+                id: workspace
+                implicitWidth: 1400
+                color: "transparent"
+                clip: true
+            }
+
+            Rectangle {
+                id: docBar
+                color: "transparent"
+            }
+        }
+
+        Rectangle {
+            id: statusBar
+            implicitHeight: 50
+            color: "transparent"
+        }
+    }
+
 } 
