@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Material
 import QtQuick.Layouts
+import CanvasUtils
 
 ApplicationWindow {
     visible: true
@@ -75,16 +76,15 @@ ApplicationWindow {
                 clip: true
 
                 Item {
-                    Rectangle {
+                    width: canvas.width
+                    height: canvas.height
+                    x: (workspace.width  - width*scale)  / 2
+                    y: (workspace.height - height*scale) / 2
+                    CanvasItem {
                         id: canvas
-                        x: (workspace.width  - width*scale)  / 2
-                        y: (workspace.height - height*scale) / 2
                         width: canvasManager.width
                         height: canvasManager.height
-                        color: "white"
-                        border.color: "black"
-                        anchors.centerIn: parent
-                        visible: canvasManager.width > 0
+                        image: canvasManager.currentImage
                     }
                 }
             }
