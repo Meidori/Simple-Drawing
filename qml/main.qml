@@ -11,6 +11,10 @@ ApplicationWindow {
     Material.primary: Material.Purple
     Material.accent: Material.Pink
 
+    CreateCanvas {
+        id: createCanvasDialog
+    }
+
     menuBar: MenuBar {
         Menu {
             title: "File"
@@ -18,7 +22,7 @@ ApplicationWindow {
             Action {
                 text: "New"
                 onTriggered: {
-                    console.log("New file action triggered");
+                    createCanvasDialog.open()
                 }
             }
             Action {
