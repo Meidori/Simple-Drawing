@@ -61,7 +61,7 @@ ApplicationWindow {
 
         SplitView {
             orientation: Qt.Horizontal
-            implicitHeight: 800
+            implicitHeight: 600 
 
             Rectangle {
                 id: toolBar
@@ -71,8 +71,8 @@ ApplicationWindow {
 
             Rectangle {
                 id: workspace
-                implicitWidth: 1400
-                color: "transparent"
+		implicitWidth: 800
+		color: "transparent"
                 clip: true
 
                 Item {
