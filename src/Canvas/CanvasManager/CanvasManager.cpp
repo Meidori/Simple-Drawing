@@ -4,7 +4,7 @@
 CanvasManager::CanvasManager(QObject* parent) 
     : QObject(parent)
 {
-    m_canvasImage = QImage(1, 1, QImage::Format_ARGB32);
+    m_canvasImage = QImage(0, 0, QImage::Format_ARGB32);
     m_canvasImage.fill(Qt::transparent);
 }
 
