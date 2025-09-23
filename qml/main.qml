@@ -71,20 +71,45 @@ ApplicationWindow {
 
             Rectangle {
                 id: workspace
-		implicitWidth: 800
-		color: "transparent"
+                implicitWidth: 800
+                color: "transparent"
                 clip: true
 
                 Item {
+                    id: canvas_area
                     width: canvas.width
                     height: canvas.height
                     x: (workspace.width  - width*scale)  / 2
                     y: (workspace.height - height*scale) / 2
+                    scale: 1
                     CanvasItem {
                         id: canvas
                         width: canvasManager.width
                         height: canvasManager.height
                         image: canvasManager.currentImage
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        
+                        onWheel: (wheel) => {
+                            if (wheel.modifiers & Qt.ControlModifier) {
+                                var cursorX = wheel.x
+                                var cursorY = wheel.y
+                                var oldScale = canvas_area.scale
+
+                                var newScale = (wheel.angleDelta.y > 0)
+                                    ? Math.min(10, oldScale + 0.1)
+                                    : Math.max(0.1, oldScale - 0.1)
+
+                                var scaleFactor = newScale / oldScale
+
+                                canvas_area.scale = newScale
+
+                                canvas_area.x -= (cursorX - canvas_area.x) * (scaleFactor - 1)
+                                canvas_area.y -= (cursorY - canvas_area.y) * (scaleFactor - 1)
+                            }
+                        }
                     }
                 }
             }
