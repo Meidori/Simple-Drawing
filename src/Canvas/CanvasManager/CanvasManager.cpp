@@ -1,5 +1,4 @@
 #include "CanvasManager.h"
-#include <QPainter>
 
 CanvasManager::CanvasManager(QObject* parent) 
     : QObject(parent)
@@ -27,6 +26,27 @@ void CanvasManager::clearCanvas()
     }
 }
 
+void CanvasManager::addLine(const QVector3D& start, const QVector3D& end)
+{
+    auto* line = new LineObject(start, end, this);
+    m_objects.append(line);
+    
+    redrawCanvas();
+}
+
+void CanvasManager::redrawCanvas()
+{
+    if (m_canvasImage.isNull()) return;
+    
+    m_canvasImage.fill(Qt::white);
+    QPainter painter(&m_canvasImage);
+    
+    for (auto* object : m_objects) {
+        object->draw(&painter);
+    }
+    
+    emit canvasCreated();
+}
 
 int CanvasManager::width() const { return m_width; }
 int CanvasManager::height() const { return m_height; }

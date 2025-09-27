@@ -16,11 +16,15 @@ set(SOURCES
     src/main.cpp
     src/Canvas/CanvasManager/CanvasManager.cpp
     src/Canvas/CanvasItem/CanvasItem.cpp
+    src/GraphicObject/GraphicObject.cpp
+    src/GraphicObject/LineObject/LineObject.cpp
 )
 
 set(HEADERS
     src/Canvas/CanvasManager/CanvasManager.h
     src/Canvas/CanvasItem/CanvasItem.h
+    src/GraphicObject/GraphicObject.h
+    src/GraphicObject/LineObject/LineObject.h
 )
 
 add_executable(Simple-Drawing ${SOURCES} ${HEADERS})

@@ -67,6 +67,19 @@ ApplicationWindow {
                 id: toolBar
                 implicitWidth: 50
                 color: "transparent"
+
+                Button {
+                    id: line
+                    Label {
+                        text: "test line"
+                    }
+                    onClicked: {
+                        canvasManager.addLine(
+                            Qt.vector3d(100, 200, 1),
+                            Qt.vector3d(300, 400, 1)
+                        )
+                    }
+                }
             }
 
             Rectangle {
