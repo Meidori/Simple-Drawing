@@ -23,7 +23,7 @@ ApplicationWindow {
             Action {
                 text: "New"
                 onTriggered: {
-                    createCanvasDialog.open()
+                    createCanvasDialog.open();
                 }
             }
             Action {
@@ -61,7 +61,7 @@ ApplicationWindow {
 
         SplitView {
             orientation: Qt.Horizontal
-            implicitHeight: 600 
+            implicitHeight: 600
 
             Rectangle {
                 id: toolBar
@@ -76,12 +76,19 @@ ApplicationWindow {
                 clip: true
 
                 Item {
-                    id: canvas_area
+                    id: canvasArea
                     width: canvas.width
                     height: canvas.height
-                    x: (workspace.width  - width*scale)  / 2
-                    y: (workspace.height - height*scale) / 2
+                    x: (workspace.width - width * scale) / 2
+                    y: (workspace.height - height * scale) / 2
                     scale: 1
+
+                    property real minScale: 0.1
+                    property real maxScale: 10.0
+                    property real scaleFactor: 1.1 
+                    
+                    focus: true
+
                     CanvasItem {
                         id: canvas
                         width: canvasManager.width
@@ -89,26 +96,29 @@ ApplicationWindow {
                         image: canvasManager.currentImage
                     }
 
-                    MouseArea {
-                        anchors.fill: parent
-                        
+                    WheelHandler {
+                        id: scaling
+                        acceptedModifiers: Qt.ControlModifier
+                        acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+
                         onWheel: (wheel) => {
-                            if (wheel.modifiers & Qt.ControlModifier) {
-                                var cursorX = wheel.x
-                                var cursorY = wheel.y
-                                var oldScale = canvas_area.scale
+                            const pLocal = Qt.point(wheel.x, wheel.y);
+                            const before = canvasArea.mapToItem(workspace, pLocal);
 
-                                var newScale = (wheel.angleDelta.y > 0)
-                                    ? Math.min(10, oldScale + 0.1)
-                                    : Math.max(0.1, oldScale - 0.1)
+                            const dir = (wheel.angleDelta.y || wheel.pixelDelta.y) > 0 ? 1 : -1;
+                            let newScale = canvasArea.scale * (dir > 0 ? canvasArea.scaleFactor : 1 / canvasArea.scaleFactor);
+                            newScale = Math.max(canvasArea.minScale, Math.min(canvasArea.maxScale, newScale));
+                            if (newScale === canvasArea.scale)
+                                return;
 
-                                var scaleFactor = newScale / oldScale
+                            canvasArea.scale = newScale;
 
-                                canvas_area.scale = newScale
+                            const after = canvasArea.mapToItem(workspace, pLocal);
 
-                                canvas_area.x -= (cursorX - canvas_area.x) * (scaleFactor - 1)
-                                canvas_area.y -= (cursorY - canvas_area.y) * (scaleFactor - 1)
-                            }
+                            canvasArea.x += before.x - after.x;
+                            canvasArea.y += before.y - after.y;
+
+                            wheel.accepted = true;
                         }
                     }
                 }
@@ -126,5 +136,4 @@ ApplicationWindow {
             color: "transparent"
         }
     }
-
-} 
+}
