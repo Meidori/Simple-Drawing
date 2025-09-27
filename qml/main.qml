@@ -121,6 +121,15 @@ ApplicationWindow {
                             wheel.accepted = true;
                         }
                     }
+
+                    DragHandler {
+                        id: moving
+                        target: canvasArea
+                        acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+                        acceptedButtons: Qt.MiddleButton
+                        grabPermissions: PointerHandler.CanTakeOverFromAnything
+                                        | PointerHandler.ApprovesTakeOverByAnything
+                    }
                 }
             }
 
