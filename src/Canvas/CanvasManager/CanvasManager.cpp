@@ -26,12 +26,53 @@ void CanvasManager::clearCanvas()
     }
 }
 
+void CanvasManager::setActiveTool(Tool tool)
+{
+    if (m_activeTool != tool) {
+        m_activeTool = tool;
+        emit activeToolChanged();
+    }
+}
+
 void CanvasManager::addLine(const QVector3D& start, const QVector3D& end)
 {
     auto* line = new LineObject(start, end, this);
     m_objects.append(line);
     
     redrawCanvas();
+}
+
+void CanvasManager::startDrawingLine(const QVector3D& point)
+{
+    if (m_activeTool != ToolLine) return;
+
+    m_isDrawing = true;
+    m_tempStartPoint = point;
+}
+
+void CanvasManager::updateDrawingLine(const QVector3D& point)
+{
+    if (!m_isDrawing || m_activeTool != ToolLine) return;
+    
+    redrawCanvas();
+    
+    if (!m_canvasImage.isNull()) {
+        QImage tempImage = m_canvasImage;
+        QPainter painter(&tempImage);
+        painter.setPen(QPen(Qt::gray, 2, Qt::DotLine, Qt::RoundCap));
+        painter.drawLine(m_tempStartPoint.toPointF(), point.toPointF());
+        
+        m_canvasImage = tempImage;
+        emit canvasCreated();
+    }
+}
+
+void CanvasManager::finishDrawingLine(const QVector3D& point)
+{
+    if (!m_isDrawing || m_activeTool != ToolLine) return;
+    
+    m_isDrawing = false;
+    addLine(m_tempStartPoint, point);
 }
 
 void CanvasManager::redrawCanvas()

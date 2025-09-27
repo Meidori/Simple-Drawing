@@ -69,15 +69,14 @@ ApplicationWindow {
                 color: "transparent"
 
                 Button {
-                    id: line
-                    Label {
-                        text: "test line"
-                    }
+                    id: lineTool
+                    text: "Line"
+                    checkable: true
+                    checked: false
                     onClicked: {
-                        canvasManager.addLine(
-                            Qt.vector3d(100, 200, 1),
-                            Qt.vector3d(300, 400, 1)
-                        )
+                        if (checked) {
+                            canvasManager.activeTool = CanvasManager.ToolLine
+                        }
                     }
                 }
             }
@@ -107,6 +106,33 @@ ApplicationWindow {
                         width: canvasManager.width
                         height: canvasManager.height
                         image: canvasManager.currentImage
+
+                        MouseArea {
+                            anchors.fill: parent
+                            acceptedButtons: Qt.LeftButton
+                            
+                            onPressed: (mouse) => {
+                                if (canvasManager.activeTool === CanvasManager.ToolLine) {
+                                    var point = Qt.vector3d(mouse.x, mouse.y, 1)
+                                    canvasManager.startDrawingLine(point)
+                                }
+                            }
+                            
+                            onPositionChanged: (mouse) => {
+                                if ((mouse.buttons & Qt.LeftButton) && 
+                                    canvasManager.activeTool === CanvasManager.ToolLine) {
+                                    var point = Qt.vector3d(mouse.x, mouse.y, 1)
+                                    canvasManager.updateDrawingLine(point)
+                                }
+                            }
+                            
+                            onReleased: (mouse) => {
+                                if (canvasManager.activeTool === CanvasManager.ToolLine) {
+                                    var point = Qt.vector3d(mouse.x, mouse.y, 1)
+                                    canvasManager.finishDrawingLine(point)
+                                }
+                            }
+                        }
                     }
 
                     WheelHandler {
