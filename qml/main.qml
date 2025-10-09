@@ -63,19 +63,33 @@ ApplicationWindow {
             orientation: Qt.Horizontal
             implicitHeight: 600
 
-            Rectangle {
+            Column {
                 id: toolBar
-                implicitWidth: 50
-                color: "transparent"
 
                 Button {
                     id: lineTool
                     text: "Line"
+                    width: parent.width * 0.9  
                     checkable: true
                     checked: false
                     onClicked: {
                         if (checked) {
+                            selectTool.checked = false;
                             canvasManager.activeTool = CanvasManager.ToolLine
+                        }
+                    }
+                }
+
+                Button {
+                    id: selectTool
+                    text: "Select"
+                    width: parent.width * 0.9
+                    checkable: true
+                    checked: false
+                    onClicked: {
+                        if (checked) {
+                            lineTool.checked = false;
+                            canvasManager.activeTool = CanvasManager.ToolSelect
                         }
                     }
                 }
@@ -115,6 +129,9 @@ ApplicationWindow {
                                 if (canvasManager.activeTool === CanvasManager.ToolLine) {
                                     var point = Qt.vector3d(mouse.x, mouse.y, 1)
                                     canvasManager.startDrawingLine(point)
+                                } else if (canvasManager.activeTool === CanvasManager.ToolSelect) {
+                                    var point = Qt.vector3d(mouse.x, mouse.y, 1)
+                                    canvasManager.selectObjectAt(point)
                                 }
                             }
                             

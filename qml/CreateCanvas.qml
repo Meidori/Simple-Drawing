@@ -43,7 +43,7 @@ Dialog {
                 horizontalAlignment: Text.AlignHCenter
                 validator: IntValidator { bottom: 1; top: 10000 }
                 placeholderText: qsTr("Width px")
-                text: "800"
+                text: "350"
             }
         }
 
@@ -64,7 +64,7 @@ Dialog {
                 horizontalAlignment: Text.AlignHCenter
                 validator: IntValidator { bottom: 1; top: 10000 }
                 placeholderText: qsTr("Height px")
-                text: "600"
+                text: "350"
             }
         }
     }

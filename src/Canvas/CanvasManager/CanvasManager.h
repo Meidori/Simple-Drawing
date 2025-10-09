@@ -8,6 +8,7 @@
 #include <QImage>
 #include <QPainter>
 #include <QList>
+#include <QDebug>
 
 class CanvasManager : public QObject
 {
@@ -21,7 +22,8 @@ class CanvasManager : public QObject
 public:
     enum Tool {
         ToolNone,
-        ToolLine
+        ToolLine,
+        ToolSelect
     };
 
     Q_ENUM(Tool)
@@ -37,6 +39,9 @@ public:
     Q_INVOKABLE void startDrawingLine(const QVector3D& point);
     Q_INVOKABLE void updateDrawingLine(const QVector3D& point);
     Q_INVOKABLE void finishDrawingLine(const QVector3D& point);
+
+    Q_INVOKABLE void selectObjectAt(const QVector3D& point);
+    Q_INVOKABLE void clearSelection();
     
     int width() const;
     int height() const;
@@ -50,6 +55,7 @@ signals:
 
 private:
     void redrawCanvas();
+    GraphicObject* findObjectAt(const QPointF& point);
 
 private:
     int m_width = 0;

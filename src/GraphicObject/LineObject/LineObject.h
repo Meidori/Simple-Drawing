@@ -4,6 +4,7 @@
 #include <QVector3D>
 #include <QPainter>
 #include <QPointF>
+#include <QRectF>
 
 class LineObject : public GraphicObject 
 {
@@ -22,6 +23,8 @@ public:
     void setEndPoint(const QVector3D& point);
 
     void draw(QPainter* painter) override;
+    bool contains(const QPointF& point) const override;
+    QRectF boundingRect() const override;
 
 signals:
     void pointsChanged();

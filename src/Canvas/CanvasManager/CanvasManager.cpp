@@ -30,6 +30,11 @@ void CanvasManager::setActiveTool(Tool tool)
 {
     if (m_activeTool != tool) {
         m_activeTool = tool;
+        
+        if (tool != ToolSelect) {
+            clearSelection();
+        }
+        
         emit activeToolChanged();
     }
 }
@@ -89,7 +94,48 @@ void CanvasManager::redrawCanvas()
     emit canvasCreated();
 }
 
+void CanvasManager::selectObjectAt(const QVector3D& point)
+{
+    if (m_activeTool != ToolSelect) return;
+    
+    GraphicObject* clickedObject = findObjectAt(point.toPointF());
+    
+    for (auto* object : m_objects) {
+        object->setSelected(false);
+    }
+    
+    if (clickedObject) {
+        clickedObject->setSelected(true);
+        qDebug() << "Object selected";
+    }
+    
+    redrawCanvas();
+}
+
+void CanvasManager::clearSelection()
+{
+    for (auto* object : m_objects) {
+        object->setSelected(false);
+    }
+    redrawCanvas();
+}
+
+GraphicObject* CanvasManager::findObjectAt(const QPointF& point)
+{
+    for (int i = m_objects.size() - 1; i >= 0; --i) {
+        GraphicObject* obj = m_objects[i];
+        if (obj->contains(point)) {
+            return obj;
+        }
+    }
+    return nullptr;
+}
+
 int CanvasManager::width() const { return m_width; }
 int CanvasManager::height() const { return m_height; }
 QSize CanvasManager::resolution() const { return QSize(m_width, m_height); }
 QImage CanvasManager::currentImage() const { return m_canvasImage; }
+
+
+
+
